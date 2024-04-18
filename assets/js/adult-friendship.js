@@ -60,6 +60,7 @@
 //   console.log(session_id);
 // });
 
+let session_id; 
 
 // Function to extract SESSION_ID from the URL
 function extractSessionIdFromUrl(url) {
@@ -71,12 +72,13 @@ function extractSessionIdFromUrl(url) {
 function testExtractSessionIdFromUrl() {
   const sampleUrl = "https://vassarpsych.az1.qualtrics.com/jfe/preview/previewId/50e8b891-9fea-4141-b9e9-8bedaa5aefaa/SV_3q3Aq6mArVZRJ3M?Q_CHL=preview&Q_SurveyVersionID=current&PROLIFIC_PID=12345&STUDY_ID=54321&SESSION_ID=ABCDE12345";
 
-  const session_id = extractSessionIdFromUrl(sampleUrl);
+  session_id = extractSessionIdFromUrl(sampleUrl);
   console.log(session_id); // This should output "ABCDE12345"
 }
 
 // Call the function to test extractSessionIdFromUrl
 testExtractSessionIdFromUrl();
+console.log(session_id);
 
 /**
  * add event on element
