@@ -75,7 +75,7 @@ function extractSessionIdFromUrl(url) {
 //   console.log(session_id); // This should output "ABCDE12345"
 // }
 
-// // Call the function to test extractSessionIdFromUrl
+// Call the function to test extractSessionIdFromUrl
 // testExtractSessionIdFromUrl();
 
 /**
