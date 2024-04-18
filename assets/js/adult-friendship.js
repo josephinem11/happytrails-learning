@@ -43,7 +43,7 @@ const generateRandomSampleUrls = function (count) {
     const PROLIFIC_PID = Math.floor(Math.random() * 1000);
     const STUDY_ID = Math.floor(Math.random() * 1000);
     session_id = Math.floor(Math.random() * 1000); // Assign session_id in generateRandomSampleUrls
-    const url = `https://example.com?PROLIFIC_PID=${PROLIFIC_PID}&STUDY_ID=${STUDY_ID}&SESSION_ID=${SESSION_ID}`;
+    const url = `https://example.com?PROLIFIC_PID=${PROLIFIC_PID}&STUDY_ID=${STUDY_ID}&SESSION_ID=${session_id}`;
     urls.push(url);
   }
   return urls;
@@ -311,13 +311,13 @@ document.addEventListener('DOMContentLoaded', function () {
   openModalBtn.addEventListener('click', function () {
     // Send GET request to start the quiz
     if (session_id) {
-    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${session_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-  }
+      fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${session_id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
     showModal();
     resetQuiz();
   });
@@ -327,12 +327,14 @@ document.addEventListener('DOMContentLoaded', function () {
   closeButton.addEventListener('click', function () {
     hideModal();
     // Make a GET request to the endpoint
-    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    if (session_id) {
+      fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
   });
 
 
