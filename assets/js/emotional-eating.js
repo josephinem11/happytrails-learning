@@ -17,7 +17,7 @@ const getUrlParams = function (url) {
 const params = getUrlParams(window.location.href);
 const session_id = params['SESSION_ID'];
 
-console.log(session_id)
+console.log(session_id);
 
 
 /**
@@ -185,15 +185,6 @@ function exitModal() {
       'Content-Type': 'application/json'
     }
   })
-    .then(() => {
-      // Log session_id after the GET request
-      console.log(session_id);
-
-      // Handle response here if needed
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
 }
 
 function calculateScore() {
@@ -206,11 +197,8 @@ function calculateScore() {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      console.log(session_id);
+      return response.json();
     })
-    .catch(error => {
-      console.error('Error:', error);
-    });
 }
 
 
@@ -272,15 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
     headers: {
       'Content-Type': 'application/json'
     }
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-    });
-
-  // Log session_id after the GET request
-  console.log(session_id);
+  });
   showModal();
   resetQuiz();
 });
@@ -295,15 +275,8 @@ closeButton.addEventListener('click', function () {
     headers: {
       'Content-Type': 'application/json'
     }
-  })
-})
-  .then(() => {
-    // Log session_id after the GET request
-    console.log(session_id);
-  })
-  .catch(error => {
-    console.error('Error:', error);
   });
+});
 
   // Close the modal when clicking outside of it
   window.addEventListener('click', function (event) {

@@ -3,7 +3,7 @@
 /**
  * Function to extract URL parameters
  */
- const getUrlParams = function (url) {
+const getUrlParams = function (url) {
   const params = {};
   const searchParams = new URLSearchParams(new URL(url).search);
   for (const [key, value] of searchParams) {
@@ -183,15 +183,6 @@ function exitModal() {
       'Content-Type': 'application/json'
     }
   })
-    .then(() => {
-      // Log session_id after the GET request
-      console.log(session_id);
-
-      // Handle response here if needed
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
 }
 
 function calculateScore() {
@@ -204,11 +195,8 @@ function calculateScore() {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      console.log(session_id);
+      return response.json();
     })
-    .catch(error => {
-      console.error('Error:', error);
-    });
 }
 
 
@@ -263,44 +251,28 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Add click event listener to open the modal
- openModalBtn.addEventListener('click', function () {
-  // Send GET request to start the quiz
-  fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${SESSION_ID}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+  openModalBtn.addEventListener('click', function () {
+    // Send GET request to start the quiz
+    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${SESSION_ID}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
       }
     });
+    showModal();
+    resetQuiz();
+  });
 
-  // Log session_id after the GET request
-  console.log(session_id);
-  showModal();
-  resetQuiz();
-});
-
-
-// Close the modal when clicking on the close button
-closeButton.addEventListener('click', function () {
-  hideModal();
-  // Make a GET request to the endpoint
-  fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${SESSION_ID}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-})
-  .then(() => {
-    // Log session_id after the GET request
-    console.log(session_id);
-  })
-  .catch(error => {
-    console.error('Error:', error);
+  // Close the modal when clicking on the close button
+  closeButton.addEventListener('click', function () {
+    hideModal();
+    // Make a GET request to the endpoint
+    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${SESSION_ID}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
   });
 
 
