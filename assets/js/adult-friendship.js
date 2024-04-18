@@ -16,7 +16,7 @@ const getUrlParams = function (url) {
 const params = getUrlParams(window.location.href);
 const session_id = params['SESSION_ID'];
 
-console.log(session);
+console.log(session_id);
 
 
 
