@@ -237,6 +237,7 @@ function exitModal() {
   modal.style.display = 'none';
 
   let session_id = extractSessionIdFromUrl(window.location.href);
+  console.log(session_id); 
 
   // Make a GET request to the end endpoint
   if (session_id) {
@@ -251,6 +252,7 @@ function exitModal() {
 
 function calculateScore() {
   let session_id = extractSessionIdFromUrl(window.location.href);
+  console.log(session_id); 
   // Construct the URL with the appropriate query parameters
   if (session_id) {
     const scoreUrl = `https://hammerhead-app-5ehuo.ondigitalocean.app/app/score/?session_id=${session_id}&total=${questions.length}&correct=${score}`;
@@ -330,6 +332,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Add click event listener to open the modal
   openModalBtn.addEventListener('click', function () {
     let session_id = extractSessionIdFromUrl(window.location.href);
+    console.log(session_id); 
     // Send GET request to start the quiz
     if (session_id) {
       fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${session_id}`, {
@@ -348,6 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Close the modal when clicking on the close button
   closeButton.addEventListener('click', function () {
     let session_id = extractSessionIdFromUrl(window.location.href);
+    console.log(session_id); 
     // Make a GET request to the endpoint
     if (session_id) {
       fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
