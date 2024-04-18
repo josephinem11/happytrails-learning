@@ -16,6 +16,8 @@
 const params = getUrlParams(window.location.href);
 const session_id = params['SESSION_ID'];
 
+console.log(session_id)
+
 
 /**
  * add event on element
@@ -174,17 +176,26 @@ function exitModal() {
   modal.style.display = 'none';
 
   // Make a GET request to the end endpoint
-  fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
+  fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${SESSION_ID}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
     }
   })
+    .then(() => {
+      // Log session_id after the GET request
+      console.log(session_id);
+
+      // Handle response here if needed
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
 
 function calculateScore() {
   // Construct the URL with the appropriate query parameters
-  const scoreUrl = `https://hammerhead-app-5ehuo.ondigitalocean.app/app/score/?session_id=${session_id}&total=${questions.length}&correct=${score}`;
+  const scoreUrl = `https://hammerhead-app-5ehuo.ondigitalocean.app/app/score/?session_id=${SESSION_ID}&total=${questions.length}&correct=${score}`;
 
   // Send a GET request to the API endpoint
   fetch(scoreUrl)
@@ -192,9 +203,13 @@ function calculateScore() {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      return response.json();
+      console.log(session_id);
     })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
+
 
 function showScore() {
   resetState();
@@ -248,22 +263,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Add click event listener to open the modal
   openModalBtn.addEventListener('click', function () {
-    showModal();
-    resetQuiz();
-    quizStartTime = new Date(); 
-    // trigger event
-    openModalBtn.dispatchEvent(timeElapsedEvent);
-  });
-
-  // Add click event listener to open the modal
-  openModalBtn.addEventListener('click', function () {
     // Send GET request to start the quiz
-    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${session_id}`, {
+    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${SESSION_ID}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
-    });
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+      });
+
+    // Log session_id after the GET request
+    console.log(session_id);
     showModal();
     resetQuiz();
   });
@@ -273,12 +287,26 @@ document.addEventListener('DOMContentLoaded', function () {
   closeButton.addEventListener('click', function () {
     hideModal();
     // Make a GET request to the endpoint
-    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
+    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${SESSION_ID}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
     })
+  })
+    .then(() => {
+      // Log session_id after the GET request
+      console.log(session_id);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
+  // Close the modal when clicking outside of it
+  window.addEventListener('click', function (event) {
+    if (event.target === modal) {
+      hideModal();
+    }
   });
 
   // Prevent the modal from closing when clicking inside it
@@ -298,5 +326,6 @@ document.addEventListener('DOMContentLoaded', function () {
     modalContent.classList.remove('active');
   }
 });
+
 
 
