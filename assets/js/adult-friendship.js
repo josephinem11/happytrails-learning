@@ -337,7 +337,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // Close the modal when clicking on the close button
   closeButton.addEventListener('click', function () {
     let session_id = extractSessionIdFromUrl(window.location.href);
-  
     // Make a GET request to the endpoint
     if (session_id) {
       fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {

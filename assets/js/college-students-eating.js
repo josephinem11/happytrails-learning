@@ -3,22 +3,27 @@
 /**
  * Function to extract URL parameters
  */
- const getUrlParams = function (url) {
-  const params = {};
-  const searchParams = new URLSearchParams(new URL(url).search);
-  for (const [key, value] of searchParams) {
-    params[key] = value;
-  }
-  return params;
+//  const getUrlParams = function (url) {
+//   const params = {};
+//   const searchParams = new URLSearchParams(new URL(url).search);
+//   for (const [key, value] of searchParams) {
+//     params[key] = value;
+//   }
+//   return params;
+// }
+
+
+// // Capture 'SESSION_ID' from URL
+// const params = getUrlParams(window.location.href);
+// const session_id = params['SESSION_ID'];
+
+// console.log(session_id);
+
+// Function to extract SESSION_ID from the URL
+function extractSessionIdFromUrl(url) {
+  let searchParams = new URLSearchParams(new URL(url).search);
+  return searchParams.get("SESSION_ID");
 }
-
-
-// Capture 'SESSION_ID' from URL
-const params = getUrlParams(window.location.href);
-const session_id = params['SESSION_ID'];
-
-console.log(session_id);
-
 
 
 /**
@@ -179,27 +184,34 @@ function exitModal() {
   const modal = document.getElementById('quizModal');
   modal.style.display = 'none';
 
+  let session_id = extractSessionIdFromUrl(window.location.href);
+
   // Make a GET request to the end endpoint
-  fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${SESSION_ID}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  if (session_id) {
+    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
 }
 
 function calculateScore() {
+  let session_id = extractSessionIdFromUrl(window.location.href);
   // Construct the URL with the appropriate query parameters
-  const scoreUrl = `https://hammerhead-app-5ehuo.ondigitalocean.app/app/score/?session_id=${SESSION_ID}&total=${questions.length}&correct=${score}`;
+  if (session_id) {
+    const scoreUrl = `https://hammerhead-app-5ehuo.ondigitalocean.app/app/score/?session_id=${session_id}&total=${questions.length}&correct=${score}`;
 
-  // Send a GET request to the API endpoint
-  fetch(scoreUrl)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
+    // Send a GET request to the API endpoint
+    fetch(scoreUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      });
+  }
 }
 
 function showScore() {
@@ -254,28 +266,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
  // Add click event listener to open the modal
  openModalBtn.addEventListener('click', function () {
+  let session_id = extractSessionIdFromUrl(window.location.href);
   // Send GET request to start the quiz
-  fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${SESSION_ID}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
+  if (session_id) {
+    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${session_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
   showModal();
   resetQuiz();
 });
 
-
 // Close the modal when clicking on the close button
 closeButton.addEventListener('click', function () {
-  hideModal();
+  let session_id = extractSessionIdFromUrl(window.location.href);
   // Make a GET request to the endpoint
-  fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${SESSION_ID}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
+  if (session_id) {
+    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+  hideModal();
 });
 
   // Close the modal when clicking outside of it
