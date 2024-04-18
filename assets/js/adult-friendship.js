@@ -21,45 +21,51 @@
 
 
 /**
- * TESTING PURPOSES 
+ * TESTING PURPOSES ›
  */
 
-let session_id; // Declare session_id in a higher scope
+// let session_id; // Declare session_id in a higher scope
 
-// Define the getUrlParams function
-const getUrlParams = function (url) {
-  const params = {};
-  const searchParams = new URLSearchParams(new URL(url).search);
-  for (const [key, value] of searchParams) {
-    params[key] = value;
-  }
-  return params;
-};
+// // Define the getUrlParams function
+// const getUrlParams = function (url) {
+//   const params = {};
+//   const searchParams = new URLSearchParams(new URL(url).search);
+//   for (const [key, value] of searchParams) {
+//     params[key] = value;
+//   }
+//   return params;
+// };
 
-// Function to generate random sample URLs
-const generateRandomSampleUrls = function (count) {
-  const urls = [];
-  for (let i = 0; i < count; i++) {
-    const PROLIFIC_PID = Math.floor(Math.random() * 1000);
-    const STUDY_ID = Math.floor(Math.random() * 1000);
-    session_id = Math.floor(Math.random() * 1000); // Assign session_id in generateRandomSampleUrls
-    const url = `https://example.com?PROLIFIC_PID=${PROLIFIC_PID}&STUDY_ID=${STUDY_ID}&SESSION_ID=${session_id}`;
-    urls.push(url);
-  }
-  return urls;
-};
+// // Function to generate random sample URLs
+// const generateRandomSampleUrls = function (count) {
+//   const urls = [];
+//   for (let i = 0; i < count; i++) {
+//     const PROLIFIC_PID = Math.floor(Math.random() * 1000);
+//     const STUDY_ID = Math.floor(Math.random() * 1000);
+//     session_id = Math.floor(Math.random() * 1000); // Assign session_id in generateRandomSampleUrls
+//     const url = `https://example.com?PROLIFIC_PID=${PROLIFIC_PID}&STUDY_ID=${STUDY_ID}&SESSION_ID=${session_id}`;
+//     urls.push(url);
+//   }
+//   return urls;
+// };
 
-// Generate random sample URLs
-const sampleUrls = generateRandomSampleUrls(5);
+// // Generate random sample URLs
+// const sampleUrls = generateRandomSampleUrls(5);
 
-// Iterate over each sample URL and capture the session ID
-sampleUrls.forEach(url => {
-  const params = getUrlParams(url);
-  session_id = params['SESSION_ID']; // Update session_id variable
-  // Use session_id variable here, for example:
-  console.log(session_id);
-});
+// // Iterate over each sample URL and capture the session ID
+// sampleUrls.forEach(url => {
+//   const params = getUrlParams(url);
+//   session_id = params['SESSION_ID']; // Update session_id variable
+//   // Use session_id variable here, for example:
+//   console.log(session_id);
+// });
 
+
+// Function to extract SESSION_ID from the URL
+function extractSessionIdFromUrl(url) {
+  let searchParams = new URLSearchParams(new URL(url).search);
+  return searchParams.get("SESSION_ID");
+}
 
 /**
  * add event on element
@@ -219,6 +225,8 @@ function exitModal() {
   const modal = document.getElementById('quizModal');
   modal.style.display = 'none';
 
+  let session_id = extractSessionIdFromUrl(window.location.href);
+
   // Make a GET request to the end endpoint
   if (session_id) {
     fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
@@ -231,6 +239,7 @@ function exitModal() {
 }
 
 function calculateScore() {
+  let session_id = extractSessionIdFromUrl(window.location.href);
   // Construct the URL with the appropriate query parameters
   if (session_id) {
     const scoreUrl = `https://hammerhead-app-5ehuo.ondigitalocean.app/app/score/?session_id=${session_id}&total=${questions.length}&correct=${score}`;
@@ -309,6 +318,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Add click event listener to open the modal
   openModalBtn.addEventListener('click', function () {
+    let session_id = extractSessionIdFromUrl(window.location.href);
     // Send GET request to start the quiz
     if (session_id) {
       fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${session_id}`, {
@@ -318,6 +328,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });
     }
+
     showModal();
     resetQuiz();
   });
@@ -325,7 +336,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Close the modal when clicking on the close button
   closeButton.addEventListener('click', function () {
-    hideModal();
+    let session_id = extractSessionIdFromUrl(window.location.href);
+  
     // Make a GET request to the endpoint
     if (session_id) {
       fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
@@ -335,6 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });
     }
+    hideModal();
   });
 
 
