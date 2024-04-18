@@ -43,7 +43,7 @@ const generateRandomSampleUrls = function (count) {
     const PROLIFIC_PID = Math.floor(Math.random() * 1000);
     const STUDY_ID = Math.floor(Math.random() * 1000);
     session_id = Math.floor(Math.random() * 1000); // Assign session_id in generateRandomSampleUrls
-    const url = `https://example.com?PROLIFIC_PID=${PROLIFIC_PID}&STUDY_ID=${STUDY_ID}&SESSION_ID=${session_id}`;
+    const url = `https://example.com?PROLIFIC_PID=${PROLIFIC_PID}&STUDY_ID=${STUDY_ID}&SESSION_ID=${SESSION_ID}`;
     urls.push(url);
   }
   return urls;
