@@ -332,6 +332,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const openModalBtn = document.getElementById('openQuizModal');
   const modalContent = document.querySelector('.modal-content');
   const closeButton = document.getElementById('closeQuizModal');
+  const sampleUrl = "https://vassarpsych.az1.qualtrics.com/jfe/preview/previewId/50e8b891-9fea-4141-b9e9-8bedaa5aefaa/SV_3q3Aq6mArVZRJ3M?Q_CHL=preview&Q_SurveyVersionID=current&PROLIFIC_PID=12345&STUDY_ID=54321&SESSION_ID=ABCDE12345";
   // const submitAnswerButton = document.getElementById('submitAnswer');
 
   // let quizStartTime;
