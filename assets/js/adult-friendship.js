@@ -343,11 +343,23 @@ document.addEventListener('DOMContentLoaded', function () {
   // });
 
   
+  
+  // Extract the session ID from the URL
+  let session_id = extractSessionIdFromUrl(window.location.href);
+  
+  // Log the extracted session ID
+  console.log("Extracted session_id:", session_id);
+
+  
   // Add click event listener to open the modal
   openModalBtn.addEventListener('click', function () {
+  console.log("Current URL:", window.location.href);
+
     let session_id = extractSessionIdFromUrl(window.location.href);
+    // Log the current URL
+    
     // let session_id = extractSessionIdFromUrl(sampleUrl);
-    console.log(session_id);
+    console.log("Extracted session_id:", session_id);
     // Send GET request to start the quiz
     if (session_id) {
       fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${session_id}`, {
