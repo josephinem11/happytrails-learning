@@ -288,32 +288,41 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Add click event listener to open the modal
- openModalBtn.addEventListener('click', function () {
-  let session_id = extractSessionIdFromUrl(window.location.href);
-  // let session_id = extractSessionIdFromUrl(sampleUrl);
-  console.log(session_id);
-  // Send GET request to start the quiz
-  if (session_id) {
-    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${session_id}`, {
-      method: 'GET'
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();  // Assuming the server responds with JSON data
-      })
-      .then(data => {
-        console.log('Success:', data);
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
+  openModalBtn.addEventListener('click', function () {
+    // Log the current URL
+    console.log("Current URL:", window.location.href);
 
-    showModal();
-    resetQuiz();
-  }
-});
+    // Extract the session ID from the URL
+    let session_id = extractSessionIdFromUrl(window.location.href);
+
+    // Log the extracted session ID
+    console.log("Extracted session_id:", session_id);
+
+    if (session_id !== null && session_id !== undefined) {
+      fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${session_id}`, {
+        method: 'GET'
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+          }
+          return response.json();  // Assuming the server responds with JSON data
+        })
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+
+      showModal();
+      resetQuiz();
+    } else {
+      // If session_id is not present, still open the modal
+      showModal();
+      resetQuiz();
+    }
+  });
 
 
 // Close the modal when clicking on the close button

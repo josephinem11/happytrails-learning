@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Extracted session_id:", session_id);
 
     if (session_id !== null && session_id !== undefined) {
-      fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
+      fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${session_id}`, {
         method: 'GET'
       })
         .then(response => {
