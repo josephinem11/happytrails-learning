@@ -707,7 +707,7 @@
   background-color: var(--kappel_15);
   color: var(--kappel);
   line-height: 20px;
-  padding: 6px 8px;
+  padding-inline: 10px;
   margin-block-end: 3px;
   font-size: 13px; /* Limit the font size */
   display: inline-block; /* Change display to inline-block */
@@ -739,6 +739,41 @@ course-card {
 /* Adjust the margin for the last card in the row */
 .course-card:nth-child(2n) {
   margin-right: 0;
+}
+
+.course-card .badge[data-title="Exercise and Workouts"] {
+  background-color: #ffcccc; /* Red background for "Exercise and Workouts" */
+  color: #000; /* Black text color */
+}
+
+.course-card .badge[data-title="Mental Health & Well-Being"] {
+  background-color: #ccffcc; /* Green background for "Mental Health & Well-Being" */
+  color: #333; /* Darker text color */
+}
+
+.course-card .badge[data-title="Nutrition & Diet"] {
+  background-color: #ff9f80; /* Coral background for "Nutrition & Diet" */
+  color: #4d2600; /* Dark brown text color */
+}
+
+.course-card .badge[data-title="Gratitude Practices"] {
+  background-color: #D8BFD8; /* Light purple background for "Gratitude Practices" */
+  color: #4B0082; /* Dark purple text color */
+}
+
+.course-card .badge[data-title="Friendship"] {
+  background-color: #80ccff; /* Sky blue background for "Friendship" */
+  color: #003366; /* Dark blue text color */
+}
+
+.course-card .badge[data-title="Love"] {
+  background-color: #ff80bf; /* Pink background for "Love" */
+  color: #4d0033; /* Dark purple text color */
+}
+
+.course-card .badge[data-title="Social Connectivity"] {
+  background-color: #093145; /* Light yellow background for "Social Connectivity" */
+  color: #FFFFFF; /* Dark brown text color */ 
 }
 
 /*-----------------------------------*\

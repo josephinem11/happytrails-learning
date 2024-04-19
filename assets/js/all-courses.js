@@ -31,3 +31,27 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const courseCards = document.querySelectorAll(".course-card");
+  
+    courseCards.forEach((card) => {
+      const title = card.querySelector(".card-title").textContent.trim();
+      const backgroundColor = getTitleBackgroundColor(title);
+      const textColor = getTitleTextColor(title);
+  
+      card.style.backgroundColor = backgroundColor;
+      card.style.color = textColor;
+    });
+  
+    function getTitleBackgroundColor(title) {
+      // Logic to determine background color based on the title
+      // Example logic:
+      if (title.includes("Nintendo Wii Games")) {
+        return "#ffcccc"; // Red background for this title
+      } else if (title.includes("Exploring the Pathways of Meditation")) {
+        return "#ccffcc"; // Green background for this title
+      } else {
+        return "var(--white)"; // Default background color
+      }
+    }
+});
