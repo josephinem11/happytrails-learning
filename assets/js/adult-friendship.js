@@ -216,7 +216,7 @@ function exitModal() {
   console.log("Exit modal time:", exitModalTime);
 
   // Call function to send elapsed time data
-  sendElapsedTimeData(null, null, exitModalTime);
+  sendElapsedTimeData(exitModalTime);
 }
 
 
@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function () {
     resetQuiz();
     openModalTime = Date.now();
     console.log("Open modal time: ", openModalTime);
-    sendElapsedTimeData(); // Send openModalTime to DataPipe
+    sendElapsedTimeData(openModalTime); // Send openModalTime to DataPipe
   });
 
 
@@ -330,10 +330,10 @@ document.addEventListener('DOMContentLoaded', function () {
     closeModalTime = Date.now(); // Capture timestamp when close modal is clicked
     console.log("Close modal time: ", closeModalTime);
     // Calculate elapsed time and send data to DataPipe
-    sendElapsedTimeData();
+    sendElapsedTimeData(closeModalTime);
   });
 
-  function sendElapsedTimeData() {
+  function sendElapsedTimeData(openModalTime, closeModalTime, exitModalTime) {
     // Check if either closeModalTime or exitModalTime is defined
     if ((closeModalTime !== undefined || exitModalTime !== undefined) && openModalTime !== undefined) {
       // Prepare data to send to DataPipe
