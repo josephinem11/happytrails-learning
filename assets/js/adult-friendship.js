@@ -204,6 +204,7 @@ function selectAnswer(e) {
   nextButton.style.display = "block";
 }
 
+let exitModalTime; 
 
 function exitModal() {
   const modal = document.getElementById('quizModal');
@@ -239,7 +240,7 @@ function calculateAndSendScore() {
     },
     body: JSON.stringify({
       experimentID: "Ba31pR7ZH2RG", // Your experiment ID
-      filename: "UNIQUE_FILENAME.csv", // Unique filename for your CSV data
+      filename: "scores.csv", // Unique filename for your CSV data
       data: dataAsString,
     }),
   })
@@ -322,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Prepare data to send to DataPipe
       const dataToSend = {
         experimentID: "ImqWglh8uDm6",
-        filename: "UNIQUE_FILENAME.csv",
+        filename: "elapsed-times.csv",
         data: JSON.stringify({
           openModalTime: openModalTime,
           closeModalTime: closeModalTime,
@@ -354,6 +355,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
   
+  let openModalTime; // Declare openModalTime as a global variable
 
   // Add click event listener to open the modal
   openModalBtn.addEventListener('click', function () {
@@ -364,6 +366,7 @@ document.addEventListener('DOMContentLoaded', function () {
     sendElapsedTimeData(); // Send openModalTime to DataPipe
   });
 
+  let closeModalTime; 
 
   // Close the modal when clicking on the close button
   closeButton.addEventListener('click', function () {
