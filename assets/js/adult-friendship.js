@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   function sendElapsedTimeData() {
-    if (openModalTime && closeModalTime || exitModal) {
+    if (openModalTime && closeModalTime && exitModalTime) {
       const currentOpenTime = Date.now(); // Current time when this function is called
       console.log("Current open time:", currentOpenTime);
       const timeToCloseModal = closeModalTime ? closeModalTime - openModalTime : 0;
