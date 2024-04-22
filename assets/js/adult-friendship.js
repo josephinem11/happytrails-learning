@@ -1,24 +1,5 @@
 'use strict';
 
-/**
- * Function to extract URL parameters
- */
-// const getUrlParams = function (url) {
-//   const params = {};
-//   const searchParams = new URLSearchParams(new URL(url).search);
-//   for (const [key, value] of searchParams) {
-//     params[key] = value;
-//   }
-//   return params;
-// }
-
-// // Capture 'SESSION_ID' from URL
-// const params = getUrlParams(window.location.href);
-// const session_id = params['SESSION_ID'];
-
-// console.log(session_id);
-
-
 
 /**
  * TESTING PURPOSES ›
@@ -60,13 +41,13 @@
 //   console.log(session_id);
 // });
 
-let session_id;
+// let session_id;
 
-// Function to extract SESSION_ID from the URL
-function extractSessionIdFromUrl(url) {
-  let searchParams = new URLSearchParams(new URL(url).search);
-  return searchParams.get("SESSION_ID");
-}
+// // Function to extract SESSION_ID from the URL
+// function extractSessionIdFromUrl(url) {
+//   let searchParams = new URLSearchParams(new URL(url).search);
+//   return searchParams.get("SESSION_ID");
+// }
 
 
 /**
@@ -226,58 +207,51 @@ function selectAnswer(e) {
 
 function exitModal() {
   const modal = document.getElementById('quizModal');
-  // const sampleUrl = "https://vassarpsych.az1.qualtrics.com/jfe/preview/previewId/50e8b891-9fea-4141-b9e9-8bedaa5aefaa/SV_3q3Aq6mArVZRJ3M?Q_CHL=preview&Q_SurveyVersionID=current&PROLIFIC_PID=12345&STUDY_ID=54321&SESSION_ID=ABCDE12345";
-  // Add click event listener to open the modal
   modal.style.display = 'none';
+  exitModalTime = Date.now();
+  console.log("Exit modal time:", exitModalTime);
 
-  let session_id = extractSessionIdFromUrl(window.location.href);
-  // let session_id = extractSessionIdFromUrl(sampleUrl);
-  console.log(session_id);
-
-  // Make a GET request to the end endpoint
-  if (session_id) {
-    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
-      method: 'GET',
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();  // Assuming the server responds with JSON data
-      })
-      .then(data => {
-        console.log('Success:', data);
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-  }
+  // Call function to send elapsed time data
+  sendElapsedTimeData();
 }
 
-function calculateScore() {
-  // const sampleUrl = "https://vassarpsych.az1.qualtrics.com/jfe/preview/previewId/50e8b891-9fea-4141-b9e9-8bedaa5aefaa/SV_3q3Aq6mArVZRJ3M?Q_CHL=preview&Q_SurveyVersionID=current&PROLIFIC_PID=12345&STUDY_ID=54321&SESSION_ID=ABCDE12345";
-  // Add click event listener to open the modal
-  let session_id = extractSessionIdFromUrl(window.location.href);
-  // let session_id = extractSessionIdFromUrl(sampleUrl);
-  console.log(session_id);
-  // Construct the URL with the appropriate query parameters
-  if (session_id) {
-    const scoreUrl = `https://hammerhead-app-5ehuo.ondigitalocean.app/app/score/?session_id=${session_id}&total=${questions.length}&correct=${score}`;
-    fetch(scoreUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Handle the JSON response data here
-        console.log(data);
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-  }
+
+function calculateAndSendScore() {
+  // Calculate the score as a percentage
+  const percentageScore = (score / questions.length) * 100;
+
+  // Calculate the score data to be sent
+  const scoreData = {
+    score: score,
+    totalQuestions: questions.length,
+    percentageScore: percentageScore // Include the percentage score in the data
+  };
+
+  // Convert score data to JSON string
+  const dataAsString = JSON.stringify(scoreData);
+
+  // Send data to DataPipe
+  fetch("https://pipe.jspsych.org/api/data/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "*/*",
+    },
+    body: JSON.stringify({
+      experimentID: "Ba31pR7ZH2RG", // Your experiment ID
+      filename: "UNIQUE_FILENAME.csv", // Unique filename for your CSV data
+      data: dataAsString,
+    }),
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok: ' + response.statusText);
+      }
+      console.log('Score data sent successfully');
+    })
+    .catch(error => {
+      console.error('There was a problem with sending score data:', error);
+    });
 }
 
 
@@ -290,9 +264,10 @@ function showScore() {
   // Add event listener to exit modal when nextButton is clicked
   nextButton.addEventListener("click", exitModal);
 
-  // Trigger API call for score calculation
-  calculateScore();
+  // Calculate and send the score
+  calculateAndSendScore();
 }
+
 
 
 function handleNextButton() {
@@ -321,8 +296,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const openModalBtn = document.getElementById('openQuizModal');
   const modalContent = document.querySelector('.modal-content');
   const closeButton = document.getElementById('closeQuizModal');
-  // const sampleUrl = "https://vassarpsych.az1.qualtrics.com/jfe/preview/previewId/50e8b891-9fea-4141-b9e9-8bedaa5aefaa/SV_3q3Aq6mArVZRJ3M?Q_CHL=preview&Q_SurveyVersionID=current&PROLIFIC_PID=12345&STUDY_ID=54321&SESSION_ID=ABCDE12345";
-  // const submitAnswerButton = document.getElementById('submitAnswer');
 
   // let quizStartTime;
   // let modalExitTime;
@@ -333,111 +306,72 @@ document.addEventListener('DOMContentLoaded', function () {
     startQuiz(); // Start the quiz
   }
 
-  // // Add click event listener to open the modal
-  // openModalBtn.addEventListener('click', function () {
-  //   showModal();
-  //   resetQuiz();
-  //   quizStartTime = new Date(); 
-  //   // trigger event
-  //   openModalBtn.dispatchEvent(timeElapsedEvent);
-  // });
+  function sendElapsedTimeData() {
+    if (openModalTime) {
+      const currentOpenTime = Date.now(); // Current time when this function is called
+      console.log("Current open time:", currentOpenTime);
 
-
-  // Add click event listener to open the modal
-  // openModalBtn.addEventListener('click', function () {
-  // console.log("Current URL:", window.location.href);
-
-  //   let session_id = extractSessionIdFromUrl(window.location.href);
-  //   // Log the current URL
-
-  //   // let session_id = extractSessionIdFromUrl(sampleUrl);
-  //   console.log("Extracted session_id:", session_id);
-  //   // Send GET request to start the quiz
-  //   if (session_id) {
-  //     fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${session_id}`, {
-  //       method: 'GET'
-  //     })
-  //       .then(response => {
-  //         if (!response.ok) {
-  //           throw new Error('Network response was not ok: ' + response.statusText);
-  //         }
-  //         return response.json();  // Assuming the server responds with JSON data
-  //       })
-  //       .then(data => {
-  //         console.log('Success:', data);
-  //       })
-  //       .catch(error => {
-  //         console.error('There was a problem with the fetch operation:', error);
-  //       });
-
-  //     showModal();
-  //     resetQuiz();
-  //   }
-  // });
-
+  
+      // Calculate elapsed times
+      const timeToCloseModal = closeModalTime ? closeModalTime - openModalTime : 0;
+      const timeToExitModal = exitModalTime ? exitModalTime - openModalTime : 0;
+      console.log("Time to close modal:", timeToCloseModal);
+      console.log("Time to exit modal:", timeToExitModal);
+  
+  
+      // Prepare data to send to DataPipe
+      const dataToSend = {
+        experimentID: "ImqWglh8uDm6",
+        filename: "UNIQUE_FILENAME.csv",
+        data: JSON.stringify({
+          openModalTime: openModalTime,
+          closeModalTime: closeModalTime,
+          exitModalTime: exitModalTime,
+          currentOpenTime: currentOpenTime,
+          timeToCloseModal: timeToCloseModal,
+          timeToExitModal: timeToExitModal
+        })
+      };
+  
+      // Send data to DataPipe
+      fetch("https://pipe.jspsych.org/api/data/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*",
+        },
+        body: JSON.stringify(dataToSend),
+      }).then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        console.log('Data sent to DataPipe successfully');
+      }).catch(error => {
+        console.error('There was a problem sending data to DataPipe:', error);
+      });
+    } else {
+      console.error("Timestamps for modal actions are missing.");
+    }
+  }
+  
 
   // Add click event listener to open the modal
   openModalBtn.addEventListener('click', function () {
-    // Log the current URL
-    console.log("Current URL:", window.location.href);
-
-    // Extract the session ID from the URL
-    let session_id = extractSessionIdFromUrl(window.location.href);
-
-    // Log the extracted session ID
-    console.log("Extracted session_id:", session_id);
-
-    if (session_id !== null && session_id !== undefined) {
-      fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${session_id}`, {
-        method: 'GET'
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-          }
-          return response.json();  // Assuming the server responds with JSON data
-        })
-        .then(data => {
-          console.log('Success:', data);
-        })
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
-
-      showModal();
-      resetQuiz();
-    } else {
-      // If session_id is not present, still open the modal
-      showModal();
-      resetQuiz();
-    }
+    showModal();
+    resetQuiz();
+    openModalTime = Date.now();
+    console.log("Open modal time: ", openModalTime);
+    sendElapsedTimeData(); // Send openModalTime to DataPipe
   });
 
 
   // Close the modal when clicking on the close button
   closeButton.addEventListener('click', function () {
-    let session_id = extractSessionIdFromUrl(window.location.href);
-    // let session_id = extractSessionIdFromUrl(sampleUrl);
-    console.log(session_id);
-    // Make a GET request to the endpoint
-    if (session_id) {
-      fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
-        method: 'GET',
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-          }
-          return response.json();  // Assuming the server responds with JSON data
-        })
-        .then(data => {
-          console.log('Success:', data);
-        })
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
-    }
     hideModal();
+    closeModalTime = Date.now(); // Capture timestamp when close modal is clicked
+    console.log("Close modal time: ", closeModalTime);
+    // Calculate elapsed time and send data to DataPipe
+    sendElapsedTimeData();
   });
 
 
