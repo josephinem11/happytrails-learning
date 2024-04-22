@@ -217,6 +217,7 @@ function exitModal() {
 
   // Call function to send elapsed time data
   sendElapsedTimeData(null, null, exitModalTime);
+}
 
 
 function calculateAndSendScore() {
@@ -392,6 +393,4 @@ document.addEventListener('DOMContentLoaded', function () {
     modalContent.classList.remove('active');
   }
 });
-}
-
 
