@@ -152,6 +152,11 @@ const nextButton = document.getElementById("quiz-next");
 let currentQuestionIndex = 0;
 let score = 0;
 
+let openModalTime; // Declare openModalTime as a global variable
+let exitModalTime; // Declare exitModalTime as a global variable
+let closeModalTime; 
+
+
 function startQuiz() {
   currentQuestionIndex = 0;
   score = 0;
@@ -204,7 +209,6 @@ function selectAnswer(e) {
   nextButton.style.display = "block";
 }
 
-let exitModalTime; 
 
 function exitModal() {
   const modal = document.getElementById('quizModal');
@@ -307,13 +311,30 @@ document.addEventListener('DOMContentLoaded', function () {
     startQuiz(); // Start the quiz
   }
 
+
+  // Add click event listener to open the modal
+  openModalBtn.addEventListener('click', function () {
+    showModal();
+    resetQuiz();
+    openModalTime = Date.now();
+    console.log("Open modal time: ", openModalTime);
+    sendElapsedTimeData(); // Send openModalTime to DataPipe
+  });
+
+
+  // Close the modal when clicking on the close button
+  closeButton.addEventListener('click', function () {
+    hideModal();
+    closeModalTime = Date.now(); // Capture timestamp when close modal is clicked
+    console.log("Close modal time: ", closeModalTime);
+    // Calculate elapsed time and send data to DataPipe
+    sendElapsedTimeData();
+  });
+
   function sendElapsedTimeData() {
-    if (openModalTime) {
+    if (openModalTime && closeModalTime || exitModal) {
       const currentOpenTime = Date.now(); // Current time when this function is called
       console.log("Current open time:", currentOpenTime);
-
-  
-      // Calculate elapsed times
       const timeToCloseModal = closeModalTime ? closeModalTime - openModalTime : 0;
       const timeToExitModal = exitModalTime ? exitModalTime - openModalTime : 0;
       console.log("Time to close modal:", timeToCloseModal);
@@ -354,28 +375,8 @@ document.addEventListener('DOMContentLoaded', function () {
       console.error("Timestamps for modal actions are missing.");
     }
   }
-  
-  let openModalTime; // Declare openModalTime as a global variable
 
-  // Add click event listener to open the modal
-  openModalBtn.addEventListener('click', function () {
-    showModal();
-    resetQuiz();
-    openModalTime = Date.now();
-    console.log("Open modal time: ", openModalTime);
-    sendElapsedTimeData(); // Send openModalTime to DataPipe
-  });
 
-  let closeModalTime; 
-
-  // Close the modal when clicking on the close button
-  closeButton.addEventListener('click', function () {
-    hideModal();
-    closeModalTime = Date.now(); // Capture timestamp when close modal is clicked
-    console.log("Close modal time: ", closeModalTime);
-    // Calculate elapsed time and send data to DataPipe
-    sendElapsedTimeData();
-  });
 
 
   // Close the modal when clicking outside of it
