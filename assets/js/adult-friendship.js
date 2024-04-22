@@ -209,21 +209,22 @@ function selectAnswer(e) {
   nextButton.style.display = "block";
 }
 
-
 function exitModal() {
   const modal = document.getElementById('quizModal');
   modal.style.display = 'none';
-  exitModalTime = Date.now();
+  const exitModalTime = Date.now();
   console.log("Exit modal time:", exitModalTime);
 
   // Call function to send elapsed time data
-  sendElapsedTimeData();
-}
+  sendElapsedTimeData(null, null, exitModalTime);
 
 
 function calculateAndSendScore() {
   // Calculate the score as a percentage
   const percentageScore = (score / questions.length) * 100;
+  console.log('Score:', score);
+  console.log('Percentage Score:', percentageScore);
+
 
   // Calculate the score data to be sent
   const scoreData = {
@@ -332,26 +333,16 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   function sendElapsedTimeData() {
-    if (openModalTime && closeModalTime && exitModalTime) {
-      const currentOpenTime = Date.now(); // Current time when this function is called
-      console.log("Current open time:", currentOpenTime);
-      const timeToCloseModal = closeModalTime ? closeModalTime - openModalTime : 0;
-      const timeToExitModal = exitModalTime ? exitModalTime - openModalTime : 0;
-      console.log("Time to close modal:", timeToCloseModal);
-      console.log("Time to exit modal:", timeToExitModal);
-  
-  
+    // Check if either closeModalTime or exitModalTime is defined
+    if ((closeModalTime !== undefined || exitModalTime !== undefined) && openModalTime !== undefined) {
       // Prepare data to send to DataPipe
       const dataToSend = {
-        experimentID: "ImqWglh8uDm6",
+        experimentID: "Ba31pR7ZH2RG",
         filename: "elapsed-times.csv",
         data: JSON.stringify({
           openModalTime: openModalTime,
           closeModalTime: closeModalTime,
           exitModalTime: exitModalTime,
-          currentOpenTime: currentOpenTime,
-          timeToCloseModal: timeToCloseModal,
-          timeToExitModal: timeToExitModal
         })
       };
   
@@ -372,12 +363,10 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('There was a problem sending data to DataPipe:', error);
       });
     } else {
-      console.error("Timestamps for modal actions are missing.");
+      console.error("One or both of the time variables (closeModalTime or exitModalTime) are missing, or openModalTime is missing.");
     }
   }
-
-
-
+  
 
   // Close the modal when clicking outside of it
   window.addEventListener('click', function (event) {
@@ -403,5 +392,6 @@ document.addEventListener('DOMContentLoaded', function () {
     modalContent.classList.remove('active');
   }
 });
+}
 
 
