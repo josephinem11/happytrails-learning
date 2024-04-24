@@ -156,6 +156,19 @@ let openModalTime; // Declare openModalTime as a global variable
 let exitModalTime; // Declare exitModalTime as a global variable
 let closeModalTime;
 
+let participantData = {
+  participant: localStorage.getItem('PROLIFIC_PID'),
+  openModalTime: null,
+  openModalDate: null,
+  closeModalTime: null,
+  closeModalDate: null,
+  exitModalTime: null,
+  exitModalDate: null,
+  score: null,
+  totalQuestions: null,
+  percentageScore: null
+};
+
 // function sendElapsedTimeData(openModalTime, closeModalTime, exitModalTime) {
 //   // Check if either closeModalTime or exitModalTime is defined
 //   if ((closeModalTime !== undefined || exitModalTime !== undefined) && openModalTime !== undefined) {
@@ -245,6 +258,57 @@ function selectAnswer(e) {
 }
 
 
+// function exitModal() {
+//   const modal = document.getElementById('quizModal');
+//   modal.style.display = 'none';
+//   const exitModalTime = Date.now();
+//   console.log("Exit modal time:", exitModalTime);
+
+//   const exitModalDate = new Date(exitModalTime);
+//   console.log("Exit modal date:", exitModalDate);
+
+//   const participant = localStorage.getItem('PROLIFIC_PID');
+//   console.log(participant);
+
+//   // Prepare data to send to DataPipe
+//   const timeData = {
+//     exitModalTime: exitModalTime,
+//     exitModalDate: exitModalDate,
+//     participant: participant
+//   };
+  
+
+//   const dataAsString = JSON.stringify({
+//     exitModalTime: timeData.exitModalTime,
+//     exitModalDate: timeData.exitModalDate,
+//     participant: participant
+//   });
+//   console.log(dataAsString);
+
+//   // Send data to DataPipe
+//   fetch("https://pipe.jspsych.org/api/data/", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Accept: "*/*",
+//     },
+//     body: JSON.stringify({
+//       experimentID: "Ba31pR7ZH2RG",
+//       filename: "exit.json",
+//       data: dataAsString,
+//     })
+//   }).then(response => {
+//     console.log(response);
+//     if (!response.ok) {
+//       throw new Error('Network response was not ok: ' + response.statusText);
+//     }
+//     console.log('Exit modal time sent to DataPipe successfully');
+//   }).catch(error => {
+//     console.error('There was a problem sending exit modal time to DataPipe:', error);
+//   });
+// }
+
+// Define exitModal function
 function exitModal() {
   const modal = document.getElementById('quizModal');
   modal.style.display = 'none';
@@ -257,42 +321,11 @@ function exitModal() {
   const participant = localStorage.getItem('PROLIFIC_PID');
   console.log(participant);
 
-  // Prepare data to send to DataPipe
-  const timeData = {
-    exitModalTime: exitModalTime,
-    exitModalDate: exitModalDate,
-    participant: participant
-  };
-  
+  // Update participantData
+  participantData.exitModalTime = exitModalTime;
+  participantData.exitModalDate = exitModalDate;
 
-  const dataAsString = JSON.stringify({
-    exitModalTime: timeData.exitModalTime,
-    exitModalDate: timeData.exitModalDate,
-    participant: participant
-  });
-  console.log(dataAsString);
-
-  // Send data to DataPipe
-  fetch("https://pipe.jspsych.org/api/data/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "*/*",
-    },
-    body: JSON.stringify({
-      experimentID: "Ba31pR7ZH2RG",
-      filename: "exit.json",
-      data: dataAsString,
-    })
-  }).then(response => {
-    console.log(response);
-    if (!response.ok) {
-      throw new Error('Network response was not ok: ' + response.statusText);
-    }
-    console.log('Exit modal time sent to DataPipe successfully');
-  }).catch(error => {
-    console.error('There was a problem sending exit modal time to DataPipe:', error);
-  });
+  sendParticipantData();
 }
 
 // sending exitModal times using sendDataToDataPipe helper 
@@ -319,6 +352,55 @@ function exitModal() {
 // }
 
 
+// function calculateAndSendScore() {
+//   // Calculate the score as a percentage
+//   const percentageScore = (score / questions.length) * 100;
+//   console.log('Score:', score);
+//   console.log('Percentage Score:', percentageScore);
+  
+//   const participant = localStorage.getItem('PROLIFIC_PID');
+//   console.log(participant);
+
+
+// // Calculate the score data to be sent
+//   const dataAsString = JSON.stringify({
+//     score: score,
+//     totalQuestions: questions.length,
+//     percentageScore: percentageScore, // Include the percentage score in the data
+//     participant: participant
+//   });
+
+//   console.log(dataAsString);
+
+//   // Convert score data to JSON string
+//   //const dataAsString = JSON.stringify(scoreData);
+//   //console.log(dataAsString);
+
+//   // Send data to DataPipe
+//   fetch("https://pipe.jspsych.org/api/data/", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Accept: "*/*",
+//     },
+//     body: JSON.stringify({
+//       experimentID: "Ba31pR7ZH2RG", // Your experiment ID
+//       filename: "allscores.json", // Unique filename for your CSV data
+//       data: dataAsString
+//     }),
+//   })
+//     .then(response => {
+//       if (!response.ok) {
+//         throw new Error('Network response was not ok: ' + response.statusText);
+//       }
+//       console.log('Score data sent successfully');
+//     })
+//     .catch(error => {
+//       console.error('There was a problem with sending score data:', error);
+//     });
+// }
+
+// Define calculateAndSendScore function
 function calculateAndSendScore() {
   // Calculate the score as a percentage
   const percentageScore = (score / questions.length) * 100;
@@ -328,43 +410,10 @@ function calculateAndSendScore() {
   const participant = localStorage.getItem('PROLIFIC_PID');
   console.log(participant);
 
-
-// Calculate the score data to be sent
-  const dataAsString = JSON.stringify({
-    score: score,
-    totalQuestions: questions.length,
-    percentageScore: percentageScore, // Include the percentage score in the data
-    participant: participant
-  });
-
-  console.log(dataAsString);
-
-  // Convert score data to JSON string
-  //const dataAsString = JSON.stringify(scoreData);
-  //console.log(dataAsString);
-
-  // Send data to DataPipe
-  fetch("https://pipe.jspsych.org/api/data/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "*/*",
-    },
-    body: JSON.stringify({
-      experimentID: "Ba31pR7ZH2RG", // Your experiment ID
-      filename: "allscores.json", // Unique filename for your CSV data
-      data: dataAsString
-    }),
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok: ' + response.statusText);
-      }
-      console.log('Score data sent successfully');
-    })
-    .catch(error => {
-      console.error('There was a problem with sending score data:', error);
-    });
+  // Update participantData
+  participantData.score = score;
+  participantData.totalQuestions = questions.length;
+  participantData.percentageScore = percentageScore;
 }
 
 // }
@@ -536,28 +585,104 @@ document.addEventListener('DOMContentLoaded', function () {
 // });
 
 
-  // Add click event listener to open the modal
-  openModalBtn.addEventListener('click', function () {
+  // // Add click event listener to open the modal
+  // openModalBtn.addEventListener('click', function () {
+  //   showModal();
+  //   resetQuiz();
+  //   const openModalTime = Date.now();
+  //   console.log("Open modal time: ", openModalTime);
+
+  //   const openModalDate = new Date(openModalTime);
+  //   console.log("Open modal date: ", openModalDate);
+
+  // });
+
+
+  // // Close the modal when clicking on the close button
+  // closeButton.addEventListener('click', function () {
+  //   hideModal();
+  //   const closeModalTime = Date.now(); // Capture timestamp when close modal is clicked
+  //   console.log("Close modal time: ", closeModalTime);
+
+  //   const closeModalDate = new Date(closeModalTime);
+  //   console.log("Close modal date: ", closeModalDate);
+  // });
+
+
+  function openModal() {
     showModal();
     resetQuiz();
     const openModalTime = Date.now();
     console.log("Open modal time: ", openModalTime);
-
+  
     const openModalDate = new Date(openModalTime);
     console.log("Open modal date: ", openModalDate);
+  
+    const participant = localStorage.getItem('PROLIFIC_PID');
+    console.log(participant);
+  
+    // Update participantData
+    participantData.openModalTime = openModalTime;
+    participantData.openModalDate = openModalDate;
+  }
+  
+  // Add event listener for openModalBtn
+  openModalBtn.addEventListener('click', openModal);
 
-  });
-
-
-  // Close the modal when clicking on the close button
-  closeButton.addEventListener('click', function () {
+  function closeModal(){
     hideModal();
+
     const closeModalTime = Date.now(); // Capture timestamp when close modal is clicked
     console.log("Close modal time: ", closeModalTime);
 
     const closeModalDate = new Date(closeModalTime);
     console.log("Close modal date: ", closeModalDate);
-  });
+
+    const participant = localStorage.getItem('PROLIFIC_PID');
+    console.log(participant);
+  
+    // Update participantData
+    participantData.closeModalTime = closeModalTime;
+    participantData.closeModalDate = closeModalDate;
+
+    sendParticipantData();
+
+  }
+
+  closeButton.addEventListener('click', closeModal);
+
+
+
+  function sendParticipantData() {
+    // Check if we have captured either closeModalTime or exitModalTime
+    if (participantData.closeModalTime || participantData.exitModalTime) {
+      const dataAsString = JSON.stringify(participantData);
+      console.log(dataAsString);
+  
+      // Send data to DataPipe
+      fetch("https://pipe.jspsych.org/api/data/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*",
+        },
+        body: JSON.stringify({
+          experimentID: "Ba31pR7ZH2RG",
+          filename: participantData.participant + "-data.json",
+          data: dataAsString,
+        })
+      }).then(response => {
+        console.log(response);
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        console.log('Participant data sent to DataPipe successfully');
+      }).catch(error => {
+        console.error('There was a problem sending participant data to DataPipe:', error);
+      });
+    }
+  }
+  
 
 
   // Close the modal when clicking outside of it
