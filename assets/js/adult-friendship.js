@@ -348,6 +348,55 @@ function exitModal() {
 }
 
 
+// function calculateAndSendScore() {
+//   // Calculate the score as a percentage
+//   const percentageScore = (score / questions.length) * 100;
+//   console.log('Score:', score);
+//   console.log('Percentage Score:', percentageScore);
+  
+//   const participant = localStorage.getItem('PROLIFIC_PID');
+//   console.log(participant);
+
+
+//   // Calculate the score data to be sent
+//   const dataAsString = JSON.stringify({
+//     score: score,
+//     totalQuestions: questions.length,
+//     percentageScore: percentageScore, // Include the percentage score in the data
+//     participant: participant
+//   });
+
+//   console.log(dataAsString);
+
+//   // Convert score data to JSON string
+//   //const dataAsString = JSON.stringify(scoreData);
+//   //console.log(dataAsString);
+
+//   // Send data to DataPipe
+//   fetch("https://pipe.jspsych.org/api/data/", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Accept: "*/*",
+//     },
+//     body: JSON.stringify({
+//       experimentID: "Ba31pR7ZH2RG", // Your experiment ID
+//       filename: "score.json", // Unique filename for your CSV data
+//       data: dataAsString
+//     }),
+//   })
+//     .then(response => {
+//       if (!response.ok) {
+//         throw new Error('Network response was not ok: ' + response.statusText);
+//       }
+//       console.log('Score data sent successfully');
+//     })
+//     .catch(error => {
+//       console.error('There was a problem with sending score data:', error);
+//     });
+// }
+
+// send scores using helper function
 function calculateAndSendScore() {
   // Calculate the score as a percentage
   const percentageScore = (score / questions.length) * 100;
@@ -357,43 +406,15 @@ function calculateAndSendScore() {
   const participant = localStorage.getItem('PROLIFIC_PID');
   console.log(participant);
 
-
-  // Calculate the score data to be sent
-  const dataAsString = JSON.stringify({
+  // Prepare data to send to DataPipe
+  const scoreData = {
     score: score,
     totalQuestions: questions.length,
     percentageScore: percentageScore, // Include the percentage score in the data
     participant: participant
-  });
+  };
 
-  console.log(dataAsString);
-
-  // Convert score data to JSON string
-  //const dataAsString = JSON.stringify(scoreData);
-  //console.log(dataAsString);
-
-  // Send data to DataPipe
-  fetch("https://pipe.jspsych.org/api/data/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "*/*",
-    },
-    body: JSON.stringify({
-      experimentID: "Ba31pR7ZH2RG", // Your experiment ID
-      filename: "score.json", // Unique filename for your CSV data
-      data: dataAsString
-    }),
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok: ' + response.statusText);
-      }
-      console.log('Score data sent successfully');
-    })
-    .catch(error => {
-      console.error('There was a problem with sending score data:', error);
-    });
+  sendDataToDataPipe(scoreData, "score.json");
 }
 
 
