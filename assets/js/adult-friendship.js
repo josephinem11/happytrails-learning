@@ -256,6 +256,7 @@ function exitModal() {
   console.log("Exit modal date:", exitModalDate);
 
   const participant = localStorage.getItem('PROLIFIC_PID');
+  console.log(participant);
 
   // Prepare data to send to DataPipe
   const timeData = {
@@ -281,7 +282,7 @@ function exitModal() {
     },
     body: JSON.stringify({
       experimentID: "Ba31pR7ZH2RG",
-      filename: "unique-name.csv",
+      filename: "exit-times.json",
       data: dataAsString,
     })
   }).then(response => {
@@ -304,6 +305,7 @@ function calculateAndSendScore() {
   console.log('Percentage Score:', percentageScore);
   
   const participant = localStorage.getItem('PROLIFIC_PID');
+  console.log(participant);
 
 
   // Calculate the score data to be sent
@@ -329,7 +331,7 @@ function calculateAndSendScore() {
     },
     body: JSON.stringify({
       experimentID: "Ba31pR7ZH2RG", // Your experiment ID
-      filename: "score.csv", // Unique filename for your CSV data
+      filename: "score.json", // Unique filename for your CSV data
       data: dataAsString
     }),
   })
