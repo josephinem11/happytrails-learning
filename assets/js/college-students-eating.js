@@ -276,7 +276,7 @@ function showScore() {
   nextButton.addEventListener("click", exitModal);
 
   // Trigger API call for score calculation
-  calculateScore();
+  calculateAndSendScore();
 }
 
 function handleNextButton() {
