@@ -244,8 +244,87 @@ function selectAnswer(e) {
   nextButton.style.display = "block";
 }
 
+// function to send time and score data to DataPipe
+function sendDataToDataPipe(timeData, filename) {
+  const dataAsString = JSON.stringify(timeData);
+  console.log(dataAsString);
+
+  // Send data to DataPipe
+  fetch("https://pipe.jspsych.org/api/data/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "*/*",
+    },
+    body: JSON.stringify({
+      experimentID: "Ba31pR7ZH2RG",
+      filename: filename,
+      data: dataAsString,
+    })
+  }).then(response => {
+    console.log(response);
+    if (!response.ok) {
+      throw new Error('Network response was not ok: ' + response.statusText);
+    }
+    console.log(filename + ' sent to DataPipe successfully');
+  }).catch(error => {
+    console.error('There was a problem sending ' + filename + ' to DataPipe:', error);
+  });
+}
 
 
+
+// function exitModal() {
+//   const modal = document.getElementById('quizModal');
+//   modal.style.display = 'none';
+//   const exitModalTime = Date.now();
+//   console.log("Exit modal time:", exitModalTime);
+
+//   const exitModalDate = new Date(exitModalTime);
+//   console.log("Exit modal date:", exitModalDate);
+
+//   const participant = localStorage.getItem('PROLIFIC_PID');
+//   console.log(participant);
+
+//   // Prepare data to send to DataPipe
+//   const timeData = {
+//     exitModalTime: exitModalTime,
+//     exitModalDate: exitModalDate,
+//     participant: participant
+//   };
+  
+
+//   const dataAsString = JSON.stringify({
+//     exitModalTime: timeData.exitModalTime,
+//     exitModalDate: timeData.exitModalDate,
+//     participant: participant
+//   });
+//   console.log(dataAsString);
+
+//   // Send data to DataPipe
+//   fetch("https://pipe.jspsych.org/api/data/", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Accept: "*/*",
+//     },
+//     body: JSON.stringify({
+//       experimentID: "Ba31pR7ZH2RG",
+//       filename: "exit-times.json",
+//       data: dataAsString,
+//     })
+//   }).then(response => {
+//     console.log(response);
+//     if (!response.ok) {
+//       throw new Error('Network response was not ok: ' + response.statusText);
+//     }
+//     console.log('Exit modal time sent to DataPipe successfully');
+//   }).catch(error => {
+//     console.error('There was a problem sending exit modal time to DataPipe:', error);
+//   });
+// }
+
+// sending exitModal times using sendDataToDataPipe helper 
 function exitModal() {
   const modal = document.getElementById('quizModal');
   modal.style.display = 'none';
@@ -264,38 +343,9 @@ function exitModal() {
     exitModalDate: exitModalDate,
     participant: participant
   };
-  
 
-  const dataAsString = JSON.stringify({
-    exitModalTime: timeData.exitModalTime,
-    exitModalDate: timeData.exitModalDate,
-    participant: participant
-  });
-  console.log(dataAsString);
-
-  // Send data to DataPipe
-  fetch("https://pipe.jspsych.org/api/data/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "*/*",
-    },
-    body: JSON.stringify({
-      experimentID: "Ba31pR7ZH2RG",
-      filename: "exit-times.json",
-      data: dataAsString,
-    })
-  }).then(response => {
-    console.log(response);
-    if (!response.ok) {
-      throw new Error('Network response was not ok: ' + response.statusText);
-    }
-    console.log('Exit modal time sent to DataPipe successfully');
-  }).catch(error => {
-    console.error('There was a problem sending exit modal time to DataPipe:', error);
-  });
+  sendDataToDataPipe(timeData, "exit-times.json");
 }
-
 
 
 function calculateAndSendScore() {
@@ -398,29 +448,69 @@ document.addEventListener('DOMContentLoaded', function () {
     startQuiz(); // Start the quiz
   }
 
+  
+// sending openModal times using sendDataToDataPipe helper 
+openModalBtn.addEventListener('click', function () {
+  showModal();
+  resetQuiz();
+  const openModalTime = Date.now();
+  console.log("Open modal time: ", openModalTime);
 
-  // Add click event listener to open the modal
-  openModalBtn.addEventListener('click', function () {
-    showModal();
-    resetQuiz();
-    const openModalTime = Date.now();
-    console.log("Open modal time: ", openModalTime);
+  const openModalDate = new Date(openModalTime);
+  console.log("Open modal date: ", openModalDate);
 
-    const openModalDate = new Date(openModalTime);
-    console.log("Open modal date: ", openModalDate);
+  // Prepare data to send to DataPipe
+  const timeData = {
+    openModalTime: openModalTime,
+    openModalDate: openModalDate,
+    participant: localStorage.getItem('PROLIFIC_PID')
+  };
 
-  });
+  sendDataToDataPipe(timeData, "open-times.json");
+});
+
+// sending closeModal times using sendDataToDataPipe helper 
+closeButton.addEventListener('click', function () {
+  hideModal();
+  const closeModalTime = Date.now(); // Capture timestamp when close modal is clicked
+  console.log("Close modal time: ", closeModalTime);
+
+  const closeModalDate = new Date(closeModalTime);
+  console.log("Close modal date: ", closeModalDate);
+
+  // Prepare data to send to DataPipe
+  const timeData = {
+    closeModalTime: closeModalTime,
+    closeModalDate: closeModalDate,
+    participant: localStorage.getItem('PROLIFIC_PID')
+  };
+
+  sendDataToDataPipe(timeData, "close-times.json");
+});
 
 
-  // Close the modal when clicking on the close button
-  closeButton.addEventListener('click', function () {
-    hideModal();
-    const closeModalTime = Date.now(); // Capture timestamp when close modal is clicked
-    console.log("Close modal time: ", closeModalTime);
+  // // Add click event listener to open the modal
+  // openModalBtn.addEventListener('click', function () {
+  //   showModal();
+  //   resetQuiz();
+  //   const openModalTime = Date.now();
+  //   console.log("Open modal time: ", openModalTime);
 
-    const closeModalDate = new Date(closeModalTime);
-    console.log("Close modal date: ", closeModalDate);
-  });
+  //   const openModalDate = new Date(openModalTime);
+  //   console.log("Open modal date: ", openModalDate);
+
+  // });
+
+
+  // // Close the modal when clicking on the close button
+  // closeButton.addEventListener('click', function () {
+  //   hideModal();
+  //   const closeModalTime = Date.now(); // Capture timestamp when close modal is clicked
+  //   console.log("Close modal time: ", closeModalTime);
+
+  //   const closeModalDate = new Date(closeModalTime);
+  //   console.log("Close modal date: ", closeModalDate);
+  // });
 
 
   // Close the modal when clicking outside of it
