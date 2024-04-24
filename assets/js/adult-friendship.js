@@ -204,6 +204,36 @@ let participantData = {
 //   }
 // }
 
+function sendParticipantData() {
+  // Check if we have captured either closeModalTime or exitModalTime
+  if (participantData.closeModalTime || participantData.exitModalTime) {
+    const dataAsString = JSON.stringify(participantData);
+    console.log(dataAsString);
+
+    // Send data to DataPipe
+    fetch("https://pipe.jspsych.org/api/data/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "*/*",
+      },
+      body: JSON.stringify({
+        experimentID: "Ba31pR7ZH2RG",
+        filename: participantData.participant + "-data.json",
+        data: dataAsString,
+      })
+    }).then(response => {
+      console.log(response);
+      if (!response.ok) {
+        throw new Error('Network response was not ok: ' + response.statusText);
+      }
+      console.log('Participant data sent to DataPipe successfully');
+    }).catch(error => {
+      console.error('There was a problem sending participant data to DataPipe:', error);
+    });
+  }
+}
+
 
 function startQuiz() {
   currentQuestionIndex = 0;
@@ -650,39 +680,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   closeButton.addEventListener('click', closeModal);
-
-
-
-  function sendParticipantData() {
-    // Check if we have captured either closeModalTime or exitModalTime
-    if (participantData.closeModalTime || participantData.exitModalTime) {
-      const dataAsString = JSON.stringify(participantData);
-      console.log(dataAsString);
-  
-      // Send data to DataPipe
-      fetch("https://pipe.jspsych.org/api/data/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "*/*",
-        },
-        body: JSON.stringify({
-          experimentID: "Ba31pR7ZH2RG",
-          filename: participantData.participant + "-data.json",
-          data: dataAsString,
-        })
-      }).then(response => {
-        console.log(response);
-        if (!response.ok) {
-          throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        console.log('Participant data sent to DataPipe successfully');
-      }).catch(error => {
-        console.error('There was a problem sending participant data to DataPipe:', error);
-      });
-    }
-  }
-  
 
 
   // Close the modal when clicking outside of it
