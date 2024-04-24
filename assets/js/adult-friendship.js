@@ -281,7 +281,7 @@ function exitModal() {
     },
     body: JSON.stringify({
       experimentID: "Ba31pR7ZH2RG",
-      filename: "exit-times.json",
+      filename: "exit.json",
       data: dataAsString,
     })
   }).then(response => {
@@ -352,7 +352,7 @@ function calculateAndSendScore() {
     },
     body: JSON.stringify({
       experimentID: "Ba31pR7ZH2RG", // Your experiment ID
-      filename: "score.json", // Unique filename for your CSV data
+      filename: "allscores.json", // Unique filename for your CSV data
       data: dataAsString
     }),
   })
