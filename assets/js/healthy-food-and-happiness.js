@@ -180,62 +180,41 @@ function selectAnswer(e) {
   nextButton.style.display = "block";
 }
 
+// Define exitModal function
 function exitModal() {
   const modal = document.getElementById('quizModal');
-  // const sampleUrl = "https://vassarpsych.az1.qualtrics.com/jfe/preview/previewId/50e8b891-9fea-4141-b9e9-8bedaa5aefaa/SV_3q3Aq6mArVZRJ3M?Q_CHL=preview&Q_SurveyVersionID=current&PROLIFIC_PID=12345&STUDY_ID=54321&SESSION_ID=ABCDE12345";
-  // Add click event listener to open the modal
   modal.style.display = 'none';
+  const exitModalTime = Date.now();
+  console.log("Exit modal time:", exitModalTime);
 
-  let session_id = extractSessionIdFromUrl(window.location.href);
-  // let session_id = extractSessionIdFromUrl(sampleUrl);
-  console.log(session_id);
+  const exitModalDate = new Date(exitModalTime);
+  console.log("Exit modal date:", exitModalDate);
 
-  // Make a GET request to the end endpoint
-  if (session_id) {
-    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
-      method: 'GET',
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();  // Assuming the server responds with JSON data
-      })
-      .then(data => {
-        console.log('Success:', data);
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-  }
+  const participant = localStorage.getItem('PROLIFIC_PID');
+  console.log(participant);
+
+  // Update participantData
+  participantData.exitModalTime = exitModalTime;
+  participantData.exitModalDate = exitModalDate;
+
+  sendParticipantData();
 }
 
-function calculateScore() {
-  // const sampleUrl = "https://vassarpsych.az1.qualtrics.com/jfe/preview/previewId/50e8b891-9fea-4141-b9e9-8bedaa5aefaa/SV_3q3Aq6mArVZRJ3M?Q_CHL=preview&Q_SurveyVersionID=current&PROLIFIC_PID=12345&STUDY_ID=54321&SESSION_ID=ABCDE12345";
-  // Add click event listener to open the modal
-  let session_id = extractSessionIdFromUrl(window.location.href);
-  // let session_id = extractSessionIdFromUrl(sampleUrl);
-  console.log(session_id);
-  // Construct the URL with the appropriate query parameters
-  if (session_id) {
-    const scoreUrl = `https://hammerhead-app-5ehuo.ondigitalocean.app/app/score/?session_id=${session_id}&total=${questions.length}&correct=${score}`;
-    fetch(scoreUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Handle the JSON response data here
-        console.log(data);
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-  }
-}
+// Define calculateAndSendScore function
+function calculateAndSendScore() {
+  // Calculate the score as a percentage
+  const percentageScore = (score / questions.length) * 100;
+  console.log('Score:', score);
+  console.log('Percentage Score:', percentageScore);
+  
+  const participant = localStorage.getItem('PROLIFIC_PID');
+  console.log(participant);
 
+  // Update participantData
+  participantData.score = score;
+  participantData.totalQuestions = questions.length;
+  participantData.percentageScore = percentageScore;
+}
 
 function showScore() {
   resetState();
@@ -247,8 +226,9 @@ function showScore() {
   nextButton.addEventListener("click", exitModal);
 
   // Trigger API call for score calculation
-  calculateScore();
+  calculateAndSendScore();
 }
+
 
 function handleNextButton() {
   currentQuestionIndex++;
@@ -287,70 +267,47 @@ document.addEventListener('DOMContentLoaded', function () {
     startQuiz(); // Start the quiz
   }
 
-  // Add click event listener to open the modal
-  openModalBtn.addEventListener('click', function () {
-    // Log the current URL
-    console.log("Current URL:", window.location.href);
-
-    // Extract the session ID from the URL
-    let session_id = extractSessionIdFromUrl(window.location.href);
-
-    // Log the extracted session ID
-    console.log("Extracted session_id:", session_id);
-
-    if (session_id !== null && session_id !== undefined) {
-      fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/start/?session_id=${session_id}`, {
-        method: 'GET'
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-          }
-          return response.json();  // Assuming the server responds with JSON data
-        })
-        .then(data => {
-          console.log('Success:', data);
-        })
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
-
-      showModal();
-      resetQuiz();
-    } else {
-      // If session_id is not present, still open the modal
-      showModal();
-      resetQuiz();
-    }
-  });
-
-
-// Close the modal when clicking on the close button
-closeButton.addEventListener('click', function () {
-  let session_id = extractSessionIdFromUrl(window.location.href);
-  // let session_id = extractSessionIdFromUrl(sampleUrl);
-  console.log(session_id);
-  // Make a GET request to the endpoint
-  if (session_id) {
-    fetch(`https://hammerhead-app-5ehuo.ondigitalocean.app/app/end/?session_id=${session_id}`, {
-      method: 'GET',
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();  // Assuming the server responds with JSON data
-      })
-      .then(data => {
-        console.log('Success:', data);
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
+  function openModal() {
+    showModal();
+    resetQuiz();
+    const openModalTime = Date.now();
+    console.log("Open modal time: ", openModalTime);
+  
+    const openModalDate = new Date(openModalTime);
+    console.log("Open modal date: ", openModalDate);
+  
+    const participant = localStorage.getItem('PROLIFIC_PID');
+    console.log(participant);
+  
+    // Update participantData
+    participantData.openModalTime = openModalTime;
+    participantData.openModalDate = openModalDate;
   }
-  hideModal();
-});
+  
+  // Add event listener for openModalBtn
+  openModalBtn.addEventListener('click', openModal);
 
+  function closeModal(){
+    hideModal();
+
+    const closeModalTime = Date.now(); // Capture timestamp when close modal is clicked
+    console.log("Close modal time: ", closeModalTime);
+
+    const closeModalDate = new Date(closeModalTime);
+    console.log("Close modal date: ", closeModalDate);
+
+    const participant = localStorage.getItem('PROLIFIC_PID');
+    console.log(participant);
+  
+    // Update participantData
+    participantData.closeModalTime = closeModalTime;
+    participantData.closeModalDate = closeModalDate;
+
+    sendParticipantData();
+
+  }
+
+  closeButton.addEventListener('click', closeModal);
 
   // Close the modal when clicking outside of it
   window.addEventListener('click', function (event) {

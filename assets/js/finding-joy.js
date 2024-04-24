@@ -304,9 +304,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const closeButton = document.getElementById('closeQuizModal');
   // const submitAnswerButton = document.getElementById('submitAnswer');
 
-  let quizStartTime;
-  let modalExitTime;
-  const timeElapsedEvent = new Event('timeElapsed');
+  // let quizStartTime;
+  // let modalExitTime;
+  // const timeElapsedEvent = new Event('timeElapsed');
 
   function resetQuiz() {
     resetState(); // Reset quiz state
