@@ -18,13 +18,13 @@
 
 // console.log(session_id); 
 
-let session_id; 
+// let session_id; 
 
-// Function to extract SESSION_ID from the URL
-function extractSessionIdFromUrl(url) {
-  let searchParams = new URLSearchParams(new URL(url).search);
-  return searchParams.get("SESSION_ID");
-}
+// // Function to extract SESSION_ID from the URL
+// function extractSessionIdFromUrl(url) {
+//   let searchParams = new URLSearchParams(new URL(url).search);
+//   return searchParams.get("SESSION_ID");
+// }
 
 /**
  * add event on element
