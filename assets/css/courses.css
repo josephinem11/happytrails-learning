@@ -650,6 +650,59 @@ border-radius: var(--radius-3);
   color: #FFFFFF; /* Dark brown text color */ 
 }
 
+.container .badge-container {
+  display: flex;
+  gap: 5px; /* Adjust the gap between badges as needed */
+}
+
+.container .badge {
+  background-color: var(--kappel_15);
+  max-width: max-content;
+  color: var(--kappel);
+  line-height: 20px;
+  padding-inline: 10px;
+  margin-block-end: 3px; 
+  font-size: 13px;
+  display: block;
+  border-radius: var(--radius-3);
+}
+
+.container .badge[data-title="Exercise and Workouts"] {
+  background-color: #ffcccc; /* Red background for "Exercise and Workouts" */
+  color: #000; /* Black text color */
+}
+
+.container .badge[data-title="Mental Health & Well-Being"] {
+  background-color: #ccffcc; /* Green background for "Mental Health & Well-Being" */
+  color: #333; /* Darker text color */
+}
+
+.container .badge[data-title="Nutrition & Diet"] {
+  background-color: #ff9f80; /* Coral background for "Nutrition & Diet" */
+  color: #4d2600; /* Dark brown text color */
+}
+
+.container .badge[data-title="Gratitude Practices"] {
+  background-color: #D8BFD8; /* Light purple background for "Gratitude Practices" */
+  color: #4B0082; /* Dark purple text color */
+}
+
+.container .badge[data-title="Friendship"] {
+  background-color: #80ccff; /* Sky blue background for "Friendship" */
+  color: #003366; /* Dark blue text color */
+}
+
+.container .badge[data-title="Love"] {
+  background-color: #ff80bf; /* Pink background for "Love" */
+  color: #4d0033; /* Dark purple text color */
+}
+
+.container .badge[data-title="Social Connectivity"] {
+  background-color: #093145; /* Light yellow background for "Social Connectivity" */
+  color: #FFFFFF; /* Dark brown text color */ 
+}
+
+
 .course-card .duration {
 background-color: var(--selective-yellow);
 max-width: max-content;
@@ -766,6 +819,19 @@ margin-right: 20px; /* Add some margin between cards */
 margin-right: 0;
 }
 
+.container {
+  padding-bottom: 20px;
+  /* justify-content: center; */
+}
+
+.container .grid-list {
+  padding-top: 20px; /* Adjust the padding top as needed */
+}
+
+#first-badge-container{
+  flex-wrap: wrap;
+  justify-content: center; /* Center horizontally */
+}
 
 /* #course-grid-hidden.grid-list {
 gap: 30px; 
