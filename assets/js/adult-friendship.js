@@ -232,7 +232,7 @@ function sendParticipantData() {
       },
       body: JSON.stringify({
         experimentID: "Ba31pR7ZH2RG",
-        filename: filename,
+        filename: filename + ".json",
         data: dataAsString,
       })
     }).then(response => {
