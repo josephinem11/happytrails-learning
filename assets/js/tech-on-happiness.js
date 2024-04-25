@@ -1,32 +1,6 @@
 'use strict';
 
 /**
- * Function to extract URL parameters
- */
-//  const getUrlParams = function (url) {
-//   const params = {};
-//   const searchParams = new URLSearchParams(new URL(url).search);
-//   for (const [key, value] of searchParams) {
-//     params[key] = value;
-//   }
-//   return params;
-// }
-
-// // Capture 'SESSION_ID' from URL
-// const params = getUrlParams(window.location.href);
-// const session_id = params['SESSION_ID'];
-
-// console.log(session_id);
-
-// let session_id; 
-
-// // Function to extract SESSION_ID from the URL
-// function extractSessionIdFromUrl(url) {
-//   let searchParams = new URLSearchParams(new URL(url).search);
-//   return searchParams.get("SESSION_ID");
-// }
-
-/**
  * add event on element
  */
 
@@ -145,11 +119,25 @@ let participantData = {
   percentageScore: null
 };
 
+
+function generateRandomString(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let randomString = '';
+  for (let i = 0; i < length; i++) {
+    randomString += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return randomString;
+}
+
 function sendParticipantData() {
   // Check if we have captured either closeModalTime or exitModalTime
   if (participantData.closeModalTime || participantData.exitModalTime) {
     const dataAsString = JSON.stringify(participantData);
     console.log(dataAsString);
+
+    // Generate a random filename
+    const filename = generateRandomString(10);
+    console.log(filename)
 
     // Send data to DataPipe
     fetch("https://pipe.jspsych.org/api/data/", {
@@ -160,7 +148,7 @@ function sendParticipantData() {
       },
       body: JSON.stringify({
         experimentID: "Ba31pR7ZH2RG",
-        filename: participantData.participant + "-data.json",
+        filename: filename + "-data.json",
         data: dataAsString,
       })
     }).then(response => {

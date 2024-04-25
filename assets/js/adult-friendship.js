@@ -2,55 +2,6 @@
 
 
 /**
- * TESTING PURPOSES ›
- */
-
-// let session_id; // Declare session_id in a higher scope
-
-// // Define the getUrlParams function
-// const getUrlParams = function (url) {
-//   const params = {};
-//   const searchParams = new URLSearchParams(new URL(url).search);
-//   for (const [key, value] of searchParams) {
-//     params[key] = value;
-//   }
-//   return params;
-// };
-
-// // Function to generate random sample URLs
-// const generateRandomSampleUrls = function (count) {
-//   const urls = [];
-//   for (let i = 0; i < count; i++) {
-//     const PROLIFIC_PID = Math.floor(Math.random() * 1000);
-//     const STUDY_ID = Math.floor(Math.random() * 1000);
-//     session_id = Math.floor(Math.random() * 1000); // Assign session_id in generateRandomSampleUrls
-//     const url = `https://example.com?PROLIFIC_PID=${PROLIFIC_PID}&STUDY_ID=${STUDY_ID}&SESSION_ID=${session_id}`;
-//     urls.push(url);
-//   }
-//   return urls;
-// };
-
-// // Generate random sample URLs
-// const sampleUrls = generateRandomSampleUrls(5);
-
-// // Iterate over each sample URL and capture the session ID
-// sampleUrls.forEach(url => {
-//   const params = getUrlParams(url);
-//   session_id = params['SESSION_ID']; // Update session_id variable
-//   // Use session_id variable here, for example:
-//   console.log(session_id);
-// });
-
-// let session_id;
-
-// // Function to extract SESSION_ID from the URL
-// function extractSessionIdFromUrl(url) {
-//   let searchParams = new URLSearchParams(new URL(url).search);
-//   return searchParams.get("SESSION_ID");
-// }
-
-
-/**
  * add event on element
  */
 
@@ -169,40 +120,6 @@ let participantData = {
   percentageScore: null
 };
 
-// function sendElapsedTimeData(openModalTime, closeModalTime, exitModalTime) {
-//   // Check if either closeModalTime or exitModalTime is defined
-//   if ((closeModalTime !== undefined || exitModalTime !== undefined) && openModalTime !== undefined) {
-//     // Prepare data to send to DataPipe
-//     const dataToSend = {
-//       experimentID: "Ba31pR7ZH2RG",
-//       filename: "elapsed-times.csv",
-//       data: JSON.stringify({
-//         openModalTime: openModalTime,
-//         closeModalTime: closeModalTime,
-//         exitModalTime: exitModalTime,
-//       })
-//     };
-
-//     // Send data to DataPipe
-//     fetch("https://pipe.jspsych.org/api/data/", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Accept: "*/*",
-//       },
-//       body: JSON.stringify(dataToSend),
-//     }).then(response => {
-//       if (!response.ok) {
-//         throw new Error('Network response was not ok: ' + response.statusText);
-//       }
-//       console.log('Data sent to DataPipe successfully');
-//     }).catch(error => {
-//       console.error('There was a problem sending data to DataPipe:', error);
-//     });
-//   } else {
-//     console.error("One or both of the time variables (closeModalTime or exitModalTime) are missing, or openModalTime is missing.");
-//   }
-// }
 
 function generateRandomString(length) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
