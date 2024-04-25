@@ -204,11 +204,24 @@ let participantData = {
 //   }
 // }
 
+function generateRandomString(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let randomString = '';
+  for (let i = 0; i < length; i++) {
+    randomString += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return randomString;
+}
+
 function sendParticipantData() {
   // Check if we have captured either closeModalTime or exitModalTime
   if (participantData.closeModalTime || participantData.exitModalTime) {
     const dataAsString = JSON.stringify(participantData);
     console.log(dataAsString);
+
+    // Generate a random filename
+    const filename = generateRandomString(10);
+    console.log(filename)
 
     // Send data to DataPipe
     fetch("https://pipe.jspsych.org/api/data/", {
@@ -219,7 +232,7 @@ function sendParticipantData() {
       },
       body: JSON.stringify({
         experimentID: "Ba31pR7ZH2RG",
-        filename: participantData.participant + "-data.json",
+        filename: filename,
         data: dataAsString,
       })
     }).then(response => {
