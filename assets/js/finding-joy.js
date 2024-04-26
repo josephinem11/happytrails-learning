@@ -339,9 +339,6 @@ document.addEventListener('DOMContentLoaded', function () {
     participantData.closeModalTime = closeModalTime;
     participantData.closeModalDate = closeModalDate;
 
-    console.log(participantData.score); // Access score from participantData
-    console.log(participantData.percentageScore); // Access percentageScore from participantData
-
     sendParticipantData();
 
   }
