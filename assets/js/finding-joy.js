@@ -339,6 +339,10 @@ document.addEventListener('DOMContentLoaded', function () {
     participantData.closeModalTime = closeModalTime;
     participantData.closeModalDate = closeModalDate;
 
+    console.log(score);
+    console.log(totalQuestions);
+    console.log(percentageScore);
+
     sendParticipantData();
 
   }
