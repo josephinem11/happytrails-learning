@@ -340,7 +340,6 @@ document.addEventListener('DOMContentLoaded', function () {
     participantData.closeModalDate = closeModalDate;
 
     console.log(score);
-    console.log(totalQuestions);
     console.log(percentageScore);
 
     sendParticipantData();
