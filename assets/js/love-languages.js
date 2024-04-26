@@ -118,7 +118,8 @@ let participantData = {
   exitModalDate: null,
   score: null,
   totalQuestions: null,
-  percentageScore: null
+  percentageScore: null,
+  courseTitle: document.title
 };
 
 
